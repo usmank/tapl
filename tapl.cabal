@@ -1,0 +1,70 @@
+name:                tapl
+version:             0.1.0.0
+synopsis:            Initial project template from stack
+description:         Please see README.md
+homepage:            http://github.com/githubuser/tapl#readme
+license:             BSD3
+license-file:        LICENSE
+author:              Usman Khan
+maintainer:          usmankhan9190@gmail.com
+copyright:           2015 Usman Khan
+category:            Programming Languges
+build-type:          Simple
+-- extra-source-files:
+cabal-version:       >=1.10
+
+--library
+--  hs-source-dirs:      src
+--  exposed-modules:     Lib
+--  build-depends:       base >= 4.7 && < 5
+--  default-language:    Haskell2010
+
+executable arith
+  hs-source-dirs:      src/arith
+  main-is:             Main.hs
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  build-depends:       base
+                     , parsec
+  default-language:    Haskell2010
+  other-modules:       Core
+                     , Lexer
+                     , Parser
+                     , Syntax
+
+executable ulc
+  hs-source-dirs:      src/untyped_lambda_calculus
+  main-is:             Main.hs
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  build-depends:       base
+                     , parsec
+  default-language:    Haskell2010
+  other-modules:       Eval
+                     , Lexer
+                     , Parser
+                     , AST
+
+executable stlc
+  hs-source-dirs:      src/simply_typed_lambda_calculus
+  main-is:             Main.hs
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  build-depends:       base
+                     , parsec
+  default-language:    Haskell2010
+  other-modules:       AST
+                     , Eval
+                     , Lexer
+                     , Parser
+                     , TypeChecker
+
+--test-suite tapl-test
+--  type:                exitcode-stdio-1.0
+--  hs-source-dirs:      test
+--  main-is:             Spec.hs
+--  build-depends:       base
+--                     , tapl
+--  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+--  default-language:    Haskell2010
+
+--source-repository head
+--  type:     git
+--  location: https://github.com/githubuser/tapl
