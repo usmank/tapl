@@ -9,8 +9,8 @@ import Lexer
 import AST
 
 -- Parses the given string.
-parse :: String -> Either ParseError [Term]
-parse = runParser program emptyContext ""
+parse :: String -> String -> Either ParseError [Term]
+parse = runParser program emptyContext
 
 -- Top level production, where a program consists of multiple terms, each terminated by a semicolon.
 program :: Parser [Term]
@@ -32,7 +32,7 @@ atomicType = parens typeAnnotation
 -- A term is a left-associative chain of applications. This allows for proper precedence where application has the
 -- highest precedence and associates to the left.
 term :: Parser Term
-term = chainl1 nonAppTerm $ return TmApp
+term = chainl1 nonAppTerm $ TmApp <$> getPosition
 
 -- Parse all terms which are not applications.
 nonAppTerm :: Parser Term
@@ -44,16 +44,18 @@ nonAppTerm = parens term
 
 ifTerm :: Parser Term
 ifTerm = do
+  pos <- getPosition
   reserved "if"
   t1 <- term
   reserved "then"
   t2 <- term
   reserved "else"
   t3 <- term
-  return $ TmIf t1 t2 t3
+  return $ TmIf pos t1 t2 t3
 
 abstraction :: Parser Term
 abstraction = do
+  pos <- getPosition
   lambda
   var <- identifier
   colon
@@ -62,14 +64,15 @@ abstraction = do
   dot
   t1 <- term
   modifyState tail
-  return $ TmAbs var typ t1
+  return $ TmAbs pos var typ t1
 
 variable :: Parser Term
 variable = do
+  pos <- getPosition
   var <- identifier
   ctx <- getState
   let i = fromMaybe (error $ "Variable '" ++ var ++ "' is unbound.") (getVarIndex var ctx)
-  return $ TmVar i
+  return $ TmVar pos i
 
 atomicTerm :: Parser Term
-atomicTerm = (reserved "true" >> return TmTrue) <|> (reserved "false" >> return TmFalse)
+atomicTerm = (reserved "true" >> TmTrue <$> getPosition) <|> (reserved "false" >> TmFalse <$> getPosition)

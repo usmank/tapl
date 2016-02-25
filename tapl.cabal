@@ -55,6 +55,7 @@ executable stlc
                      , Lexer
                      , Parser
                      , TypeChecker
+                     , Util
 
 --test-suite tapl-test
 --  type:                exitcode-stdio-1.0

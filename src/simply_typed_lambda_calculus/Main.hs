@@ -12,9 +12,9 @@ import TypeChecker
 --  [ ] Include final type for each term.
 main :: IO ()
 main = do
-  args    <- getArgs
-  input   <- getInput args
-  terms   <- parseInput input
+  args        <- getArgs
+  (f, input)  <- getInput args
+  terms       <- parseInput f input
   let results = fmap (processTerm emptyContext) terms
   print $ fmap snd results
   putStrLn $ showTerms $ fmap fst results
@@ -22,13 +22,13 @@ main = do
 processTerm :: Context -> Term -> (Term, Type)
 processTerm ctx ts = (eval ts ctx, typeOf ts ctx)
 
-getInput :: [String] -> IO String
-getInput []   = getContents
-getInput [f]  = readFile f
+getInput :: [String] -> IO (FilePath, String)
+getInput []   = (,) <$> pure "stdin" <*> getContents
+getInput [f]  = (,) <$> pure f <*> readFile f
 getInput _    = error "Incorrect number of arguments"
 
-parseInput :: String -> IO [Term]
-parseInput s =
-  case parse s of
+parseInput :: FilePath -> String -> IO [Term]
+parseInput f s =
+  case parse f s of
     Left e    -> print e >> error "Parse error"
     Right ts  -> return ts
