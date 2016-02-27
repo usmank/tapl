@@ -18,9 +18,9 @@ typeOf (TmIf sp t1 t2 t3) ctx  =
   in  if t1Type == TyBool
         then if t2Type == t3Type
               then t2Type
-              else err sp "Arms of conditional have different types."
-        else err sp "Conditional guard not a boolean."
-typeOf (TmVar sp i) ctx        = fromMaybe (err sp "typeOf: Var type lookup failed.") (getVarType i ctx)
+              else err sp "Type error: Arms of conditional have different types."
+        else err sp "Type error: Conditional guard not a boolean."
+typeOf (TmVar sp i) ctx        = fromMaybe (err sp "Type error: Var type lookup failed.") (getVarType i ctx)
 typeOf (TmAbs _ n typ t1) ctx =
   let ctx'    = addBinding n (VarBind typ) ctx
       t1Type  = typeOf t1 ctx'
@@ -31,5 +31,5 @@ typeOf (TmApp sp t1 t2) ctx    =
   in  case t1Type of
         (TyArrow t11Type t12Type) -> if t11Type == t2Type
                                       then t12Type
-                                      else err sp "Parameter type mismatch."
-        _                         -> err sp "Left side of application is not a function."
+                                      else err sp "Type error: Parameter type mismatch."
+        _                         -> err sp "Type error: Left side of application is not a function."
