@@ -6,8 +6,6 @@ import Data.Maybe
 import AST
 import Util
 
--- TODO:
---  [ ] Improve type error messages.
 typeOf :: Term -> Context -> Type
 typeOf (TmTrue _) ctx         = TyBool
 typeOf (TmFalse _) ctx        = TyBool

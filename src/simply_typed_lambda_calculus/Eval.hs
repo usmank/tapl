@@ -9,24 +9,15 @@ eval t ctx =
   let t' = eval' t
   in  if t == t' then t else eval t' ctx
 
--- TODO:
---  [ ] Refactor to take a Context.
 eval' :: Term -> Term
--- E-AppAbs
 eval' (TmApp _ (TmAbs _ _ _ t12) v2)
   | isVal v2  = shift (-1) $ substitute 0 (shift 1 v2) t12
 eval' (TmApp sp t1 t2)
-  -- E-App2
   | isVal t1  = TmApp sp t1 (eval' t2)
-  -- E-App1
   | otherwise = TmApp sp (eval' t1) t2
--- E-IfTrue
 eval' (TmIf _ (TmTrue _) t2 _) = t2
--- E-IfFalse
 eval' (TmIf _ (TmFalse _)_ t3) = t3
--- E-If
 eval' (TmIf sp t1 t2 t3) = TmIf sp (eval' t1) t2 t3
--- Return the input term itself if no evaluation rules apply.
 eval' t = t
 
 -- Returns true if the given term is a value.
