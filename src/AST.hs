@@ -79,7 +79,7 @@ getVarType i ctx =
 showTerms :: [(Term, Type)] -> String
 showTerms = intercalate "\n" . fmap f
   where
-    f t = concat [show (fst t), ":", show (snd t), ";"]
+    f t = concat [show (fst t), " : ", show (snd t), ";"]
 
 -- Given a context and a term, create the string representation of the term.
 showTerm :: Context -> Term -> String
