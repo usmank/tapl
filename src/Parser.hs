@@ -40,6 +40,7 @@ nonAppTerm = parens term
          <|> abstraction
          <|> variable
          <|> ifTerm
+         <|> letBinding
          <|> atomicTerm
 
 ifTerm :: Parser Term
@@ -52,6 +53,9 @@ ifTerm = do
   reserved "else"
   t3 <- term
   return $ TmIf pos t1 t2 t3
+
+letBinding :: Parser Term
+letBinding = error "Implement me!"
 
 abstraction :: Parser Term
 abstraction = do
@@ -75,4 +79,5 @@ variable = do
   return $ TmVar pos i
 
 atomicTerm :: Parser Term
-atomicTerm = (reserved "true" >> TmTrue <$> getPosition) <|> (reserved "false" >> TmFalse <$> getPosition)
+atomicTerm = (reserved "true" >> TmTrue <$> getPosition)
+         <|> (reserved "false" >> TmFalse <$> getPosition)

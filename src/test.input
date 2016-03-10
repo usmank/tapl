@@ -1,2 +1,5 @@
 \x:Bool.x;
 (\x:Bool->Bool. if (x false) then true else false) (\x:Bool. if x then true else false);
+
+-- Let binding
+let x = (\y:Bool.y) in (\z. x z)

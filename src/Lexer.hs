@@ -27,9 +27,11 @@ languageDef = emptyDef { Token.reservedNames    = [ "if"
                                                   , "false"
                                                   , "iszero"
                                                   , "Bool"
+                                                  , "let"
                                                   ]
                         , Token.reservedOpNames = [ "\\"
                                                   , "->"
+                                                  , "="
                                                   ]
                         , Token.commentStart    = "{-"
                         , Token.commentEnd      = "-}"
@@ -47,6 +49,9 @@ colon = void $ Token.colon lexer
 
 dot :: Parser String
 dot = Token.dot lexer
+
+equalSign :: Parser ()
+equalSign = reservedOp "="
 
 identifier :: Parser String
 identifier = Token.identifier lexer
