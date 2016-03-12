@@ -11,6 +11,7 @@ data Term = TmVar SourcePos VarIndex
           | TmTrue SourcePos
           | TmFalse SourcePos
           | TmIf SourcePos Term Term Term
+          | TmLet SourcePos VarName Term Term
           deriving (Eq)
 
 data Type = TyBool
@@ -91,6 +92,7 @@ showTerm ctx (TmApp _ t1 t2)    = showTerm ctx t1 ++ " " ++ showTerm ctx t2
 showTerm ctx (TmTrue _)         = "true"
 showTerm ctx (TmFalse _)        = "false"
 showTerm ctx (TmIf _ t1 t2 t3)  = "if " ++ showTerm ctx t1 ++ " then " ++ showTerm ctx t2 ++ " else " ++ showTerm ctx t3
+showTerm ctx (TmLet _ n t1 t2)  = "let " ++ n ++ " = " ++ showTerm ctx t1 ++ " in " ++ showTerm ctx t2
 
 -- Pick a variable name that is unique within the given context. Appends single quotes to the given name until a unique
 -- name is found. Returns both the unique name and a new context which contains the newly created name.

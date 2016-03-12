@@ -8,7 +8,7 @@ import Text.Parsec hiding (parse)
 import Lexer
 import AST
 
--- Parses the given string.
+-- Parses the given string. First paramter is the source name and the second is the actual source.
 parse :: String -> String -> Either ParseError [Term]
 parse = runParser program emptyContext
 
@@ -55,7 +55,15 @@ ifTerm = do
   return $ TmIf pos t1 t2 t3
 
 letBinding :: Parser Term
-letBinding = error "Implement me!"
+letBinding = do
+  pos <- getPosition
+  reserved "let"
+  var <- identifier
+  equalSign
+  t1 <- term
+  reserved "in"
+  t2 <- term
+  return $ TmLet pos var t1 t2
 
 abstraction :: Parser Term
 abstraction = do

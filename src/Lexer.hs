@@ -1,6 +1,7 @@
 module Lexer ( arrow
              , colon
              , dot
+             , equalSign
              , identifier
              , lambda
              , natural
@@ -28,6 +29,7 @@ languageDef = emptyDef { Token.reservedNames    = [ "if"
                                                   , "iszero"
                                                   , "Bool"
                                                   , "let"
+                                                  , "in"
                                                   ]
                         , Token.reservedOpNames = [ "\\"
                                                   , "->"
