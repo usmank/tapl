@@ -34,7 +34,7 @@ instance Show Term where
   show = showTerm emptyContext
 
 instance Show Type where
-  show (TyBool)                       = "Bool"
+  show TyBool                         = "Bool"
   show (TyArrow t1@(TyArrow _ _) t2)  = "(" ++ show t1 ++ ")->" ++ show t2
   show (TyArrow t1 t2)                = show t1 ++ "->" ++ show t2
 
@@ -47,7 +47,7 @@ addBinding n b ctx = (n, b):ctx
 
 -- Add the given variable name to the context. Returns the updated context.
 addVar :: VarName -> Context -> Context
-addVar n ctx = addBinding n NameBind ctx
+addVar n = addBinding n NameBind
 
 -- Gets the binding for the given index from the context. Basically a safer version of the partial function (!!).
 getBinding :: VarIndex -> Context -> Maybe (VarName, VarBinding)
@@ -62,11 +62,11 @@ getBinding i ctx
 -- Gets the de Bruijn index of the variable in the given context. In the case of diplicates returns the most closely
 -- bound index (i.e. leftmost in the list).
 getVarIndex :: VarName -> Context -> Maybe VarIndex
-getVarIndex n ctx = fmap toInteger $ findIndex ((n ==) . fst) ctx
+getVarIndex n ctx = toInteger <$> findIndex ((n ==) . fst) ctx
 
 -- Gets the variable name associated with the given de Bruijn index in the given context.
 getVarName :: VarIndex -> Context -> Maybe VarName
-getVarName i ctx = fmap fst $ getBinding i ctx
+getVarName i ctx = fst <$> getBinding i ctx
 
 -- Get the type of variable in the context.
 getVarType :: VarIndex -> Context -> Maybe Type
