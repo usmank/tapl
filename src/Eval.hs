@@ -2,6 +2,7 @@ module Eval ( eval
             ) where
 
 import AST
+import Util
 
 -- Repeatedly applies eval to a term until no evaluation rules apply.
 eval :: Term -> Context -> Term
@@ -18,11 +19,12 @@ eval' (TmApp sp t1 t2)
 eval' (TmIf _ (TmTrue _) t2 _) = t2
 eval' (TmIf _ (TmFalse _)_ t3) = t3
 eval' (TmIf sp t1 t2 t3) = TmIf sp (eval' t1) t2 t3
+eval' (TmLet sp n t1 t2) = err sp "Implement me!"
 eval' t = t
 
 -- Returns true if the given term is a value.
 isVal :: Term -> Bool
-isVal (TmAbs _ _ _ _) = True
+isVal TmAbs {} = True
 isVal (TmTrue _)      = True
 isVal (TmFalse _)     = True
 isVal _               = False
